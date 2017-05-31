@@ -1,0 +1,125 @@
+1. Get data
+------------
+Important message from ESGF server admins: ATTENTION: We have completed the rename of this ESGF server to esgf-node.llnl.gov from pcmdi.llnl.gov. 
+All pcmdi.llnl.gov openids have become esgf-node.llnl.gov for the server name (needed for manual entry in a wget script execution).
+
+Several data nodes are still in the process of updating their configuration to account for the server rename. Until complete, there might 
+still be issues in accessing data at some sites. We recommend trying replica data (if available) in the meantime and apologize for the inconvenience. 
+
+The easiest way to get structured data is using synda.
+NOTE: you can download individual .nc data files straight from the website https://esgf-node.llnl.gov/projects/esgf-llnl/
+using the search criterion and adding that to the My Data Cart, then navigating to the cart, checking the box against the type of data you want, 
+click Show Files then clicking on the HTTPServer. Pre-requisites for data download: have an openID AND being registered with a CMIP5 group (either 
+Research or Commercial), see below.
+
+   1.1 openID and group
+   --------------------
+   openID is a unique non-centralized identifier that allows identity checks over https:// or proxy servers (example https://ceda.ac.uk/openid/valeriu). 
+   See https://en.wikipedia.org/wiki/OpenID for further details about the protocol. 
+   When you register for CEDA, they will create an openID for you, see http://help.ceda.ac.uk/article/1.-ceda-account
+   After that, you will have to register for a working group - CMIP5 Research in this case, go here https://esgf-node.jpl.nasa.gov/ac/list/ and sign up!
+   After this step, you will be able to log in and see your profile and group affiliation (registration is done automatically to the group, pending succesful registration
+   for CEDA).
+
+   1.2 Synda
+   ---------
+   Synda is a data search, visualization and download terminal-based tool that is easy to use as opposed to search and download from the ESGF sites. 
+   Installation and usage steps:
+
+   - Install the tool:
+
+   wget --no-check-certificate https://raw.githubusercontent.com/Prodiguer/synda/master/sdc/install.sh
+   chmod +x ./install.sh
+   ./install.sh
+
+   
+   - Add lines below in your shell configuration file (e.g. '.bashrc') to set the paths correctly
+
+   export ST_HOME=$HOME/sdt
+   export PATH=$ST_HOME/bin:$PATH
+
+   - Edit credentials file to set openid and password (ESGF credential)
+
+   vi $ST_HOME/conf/credentials.conf
+
+   NOTE: Change the user name in the openID to the true CEDA user name that you have and not the FIRSTNAME.FAMILYNAME that showes up in your openID !!!
+
+   - Synda usage
+   synda intro | more -> gives you a working example of how to search and download data
+   synda certificate --help -> prompts you to finding/recreating/debugging the grid certificate (cert is in sdt/tmp/.esg)
+   synda install [FILENAME] -> downloads the data file [FILE] and puts it in sdt/data
+   synda queue -> monitor the download, log files are found in sdt/log (transfer.log tells you about the download)
+   synda reset -> cancel downloads
+   synda daemon start -> start the download daemon
+   synda --help -> help function (executables are in sdt/bin)
+
+   NOTE: synda uses myproxyclient. Authentication issues may be related to this bug: https://github.com/Prodiguer/synda/issues/63
+   To verify your myproxyclient works fine use a command e.g.
+
+   python ~/sdt/lib/python2.7/site-packages/myproxy/script.py logon -b -T logon -b -T -s slcs1.ceda.ac.uk -l valeriu -o ./credentials.pem
+
+   or
+
+   myproxyclient logon -b -T logon -b -T -s slcs1.ceda.ac.uk -l valeriu -o ./credentials.pem
+
+   to create a temporary certificate. To note is that myproxyclient comes packaged and gets installed automatically by installing synda, so does
+   pip, wheel and python (which python: ~/sdt/bin/python, python -V: 2.7.1., and this is not ideal since this python version does not have the NumPy and SciPy modules.
+
+   1.3 Practical example for ESMVal data
+   --------------------------------------
+   ESMVal namelist files (e.g. nml/namelist_Emmons.xml) contain a <model/> line of sorts:
+
+   CMIP5 MPI-M MPI-ESM-LR historical Amon r1i1p1
+
+   Pass this to synda as search variables:
+
+   synda search CMIP5 MPI-M MPI-ESM-LR historical Amon r1i1p1
+
+   then look for the specific file variables (here tro3):
+
+   synda search -f cmip5.output1.MPI-M.MPI-ESM-LR.historical.mon.atmos.Amon.r1i1p1.v20120315 tro3
+   synda install cmip5.output1.MPI-M.MPI-ESM-LR.historical.mon.atmos.Amon.r1i1p1.v20120315.tro3_Amon_MPI-ESM-LR_historical_r1i1p1_200001-200512.nc
+
+   Done!
+
+   NOTE: if, for some reason, the installation (download) is queued for long (synda queue - see waiting for a lot of time and no log entry in ~/sdt/log/transfer.log)
+   then you can just get the file in your local directory by:
+
+   synda get cmip5.output1.MPI-M.MPI-ESM-LR.historical.mon.atmos.Amon.r1i1p1.v20120315.tro3_Amon_MPI-ESM-LR_historical_r1i1p1_200001-200512.nc
+
+   1.4 Difference between 'get' and 'install' (from the developers)
+   ----------------------------------------------------------------
+   The 'install' command adds the file(s) into a queue, and returns. Then, the synda daemon running in background checks the queue, and downloads the file(s).
+
+   The 'get' command starts the download directly in foreground, and doesn't return until the download is complete.
+
+   Using the 'install' command gives more control over the download process (priority, error management, checksum control, start/stop, post-processing), which is usefull to manage a large number of files.
+
+   With the 'get' command, there is no daemon involved. It is useful to download a small number of files, and for testing.
+
+
+   Regarding your file not being downloaded with 'install' command,
+it may be caused by:
+
+   A- other files have higher priority and the file is still in 'waiting' state
+   B- the download have failed and the file is in 'error' state
+(one reason may be the integrity control indeed)
+
+
+   You can check the file status using 'show' command
+
+   e.g.
+   synda show pr_day_HadGEM2-ES_1pctCO2_r1i1p1_18891201-18991130.nc
+
+
+   If the download failed, you should find information about the error in logfiles.
+
+   1.5 Configuration and change of data server
+   -------------------------------------------
+   synda config will print out the configuration setup and you will see what config file the local synda uses
+   ~/sdt/conf/sdt.conf can be changed to query different data nodes and also the search api's
+
+   1.6 Synda find locally
+   -----------------------
+   synda list -f FILE_NAME will look for FILE_NAME file locally
+   synda list will print out all the available data locally 

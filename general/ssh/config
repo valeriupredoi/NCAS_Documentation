@@ -1,0 +1,11 @@
+Host jasmin
+Hostname jasmin-login1.ceda.ac.uk
+User valeriu
+IdentityFile ~/.ssh/id_rsa_jasmin
+ForwardAgent yes
+
+Host jasmin-sci2 jasmin-sci2.ceda.ac.uk
+User valeriu
+IdentityFile ~/.ssh/id_rsa_jasmin
+ForwardAgent yes
+ProxyCommand ssh -Y jasmin -W %h:%p

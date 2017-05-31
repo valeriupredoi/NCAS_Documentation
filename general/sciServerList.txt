@@ -1,0 +1,10 @@
+Available Jasmin compute nodes
+========================
+Host
+-----------------------
+jasmin-sci1.ceda.ac.uk
+jasmin-sci2.ceda.ac.uk
+jasmin-sci3.ceda.ac.uk
+cems-sci1.cems.rl.ac.uk
+cems-sci2.cems.rl.ac.uk
+========================

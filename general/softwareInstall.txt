@@ -1,0 +1,23 @@
+0. Access to Jasmin clusters
+----------------------------
+See http://help.ceda.ac.uk/article/187-login
+NOTE: the login1 servers are not capable of installing/running packages, reccomend ssh into sc1/2/3
+Also use this as a useful login.sh
+
+ssh-add ~/.ssh/id_rsa_jasmin
+ssh -A valeriu@jasmin-login1.ceda.ac.uk
+
+and remember to back-up your id_rsa_jasmin and id_rsa_jasmin.pub RSA key and file !!!
+
+A list of available scientific compute nodes can be found here in sciServerList.txt
+
+1. Anaconda
+------------
+Get the package from https://www.continuum.io/downloads
+Check your OS/architecture lsb_release -a or cat /etc/*release then arch
+Download whatever you need for Python 2.7
+bash Anaconda3-4.3.1-Linux-x86_64.sh
+Make sure .bashrc knows the path to anaconda eg add export PATH=/home/users/valeriu/anaconda2/bin:$PATH
+Check the versioning eg
+[valeriu@jasmin-sci1 ~]$ python -V
+Python 2.7.13 :: Anaconda 4.3.1 (64-bit)

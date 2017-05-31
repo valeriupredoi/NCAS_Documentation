@@ -1,0 +1,21 @@
+Conda-specific instructions with a pre-installed iris
+-----------------------------------------------------
+
+1. Install cf-python and cf-plot
+---------------------------------
+conda install -c ncas -c scitools cf-python
+
+cf-plot needs basemap (create a virtenv and try installing cf-plot and will see what deps are needed)
+Cartopy and basemap are conflicting (see https://github.com/SciTools/cartopy/issues/771)
+so you can't install cf-plot after installing iris (cartopy).
+
+SOLUTION: use forge channel
+
+conda install -c conda-forge basemap cartopy
+conda install -c ncas cf-plot
+
+2. Install esmpy
+----------------
+conda install -c conda-forge netcdf-fortran=4.4.4
+conda install -c conda-forge mpich
+conda install -c nesii esmpy

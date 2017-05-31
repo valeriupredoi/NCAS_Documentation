@@ -1,0 +1,50 @@
+This document details how to run and understand an ESMValTool Test
+-------------------------------------------------------------------
+-------------------------------------------------------------------
+V. Predoi, 3 May 2017
+
+1. Prerequisites
+-----------------
+Provided you have installed ESMValTool and synda succesfully (see InstallSoftware.txt for instructions
+how to install and use both), we can run a small test.
+
+Before that we need to comment out the NCL versioning error:
+
+interface_scripts/auxiliary.py
+line 104, comment out:
+    #if out[1] == "6.3.0":
+    #    error("NCL version " + out[1] + 
+    #          " not supported due to a bug " + 
+    #          "(see Known Issues in the ESMValTool user guide)")
+
+Otherwise ESMVal won't start AT ALL on servers with NCL 6.3.0 (like jasmin clusters).
+
+2. Run the MyDiag test
+-----------------------
+Have a look at the $ESM_DIR/nml/namelist_MyDiag.xml file - it is an intialization file that contains the running parameters:
+   - see an example I used (namelist_MyDiag.xml in this directory);
+   - the pointer to <include href="./config_private.xml"/> can be used to specify work/plots/simulation data/obs data externally,
+     so far I find it useless since all these paths can be specified in this file in the <GLOBAL> variables field;
+   - the field
+   <MODELS>
+       <model>  CMIP5  MPI-ESM-LR    Amon  historical   r1i1p1  1910 1919  /home/users/valeriu/sdt/data/cmip5/output1/MPI-M/MPI-ESM-LR/historical/mon/atmos/Amon/r1i1p1/v20120315/ta/ </model>
+   </MODELS> 
+     tells the code what model to use, which model parameters, and where the .nc data file lives;
+   - After setting up the namelist file just run (highly advised to run with the maximum verbosity lever, 4, so that you can unserstand what
+     internal steps are performed):
+
+     python main.py nml/namelist_MyDiag.xml > ESM_Test_Verbose4.out
+
+   - Screen output is piped to ESM_Test_Verbose4.out so you can later read and understand the output;
+   - A commented-out screen output file is available in this directory (look for '>>' comments);
+   - Plots and work are stored in the locations specified in the namelist file; NetCDF files are viewable using ncdump:
+
+     ncdump file.nc
+     ncdump -h file.nc (see only the header)
+
+3. Understanding the workflow
+-----------------------------
+After running the MyDiag test we should try and understand the workflow (basic understanding for now):
+
+   - (Python) The code reads in the namelist file and extracts the paths for input (data file, e.g. indir = /home/users/valeriu/sdt/data/cmip5/output1/MPI-M/MPI-ESM-LR/historical/mon/atmos/Amon/r1i1p1/v20120315/ta/) and output (for work, plots and I/O resampled file, e.g. fullpath = /home/users/valeriu/ESMValToolTesting/MyDiag1_2/climo/CMIP5/CMIP5_Amon_historical_MPI-ESM-LR_r1i1p1_T3M_ta_1910-1919.nc); it also reads the (usually) single variable (MyVar in this case) to handle;
+   - (NCL) MyDiag.ncl is the engine script that calls a whole bunch of utility scipts; e.g.: here reading data from the master file and extracting temperatures over time and coordinates at 200 hPa fixed altitude, extracting and writing the relevant variable MyVar to file: /path to/work/MyDiag/MyDiag_MyVar.nc, plotting using nml/cfg_MyDiag/cfg_MyDiag.ncl configuration script to /path to/plots/MyDiag  

@@ -1,0 +1,176 @@
+ESMValTool - Earth System Model Evaluation Tool.
+For further help, check the doc/-folder for pdfs and references therein.
+Running with command arguments:  nml/namelist_MyDiag.xml
+<xml_parsers.namelistHandler instance at 0x24d5b90>
+Project information:  {u'MODELS': <model.AllModels instance at 0x255ccf8>, u'GLOBAL': {u'max_data_filesize': 100, u'plot_dir': u'/home/users/valeriu/ESMValToolTesting/MyDiag1_2/plots', u'climo_dir': u'/home/users/valeriu/ESMValToolTesting/MyDiag1_2/climo', u'verbosity': 4, u'output_file_type': u'pdf', u'force_processing': False, u'write_plot_vars': True, u'max_data_blocksize': 500, u'write_plots': True, u'exit_on_warning': True, u'wrk_dir': u'/home/users/valeriu/ESMValToolTesting/MyDiag1_2/work', u'write_netcdf': True}, u'namelist_summary': u'\n\n\n###############################################################################\nnamelist_MyDiag.xml\n\nDescription\nSandbox namelist for implementing new diagnostics\n\nAuthor\nKlaus-Dirk Gottschaldt (DLR, Germany -  Klaus-Dirk.Gottschaldt@dlr.de)\n\nProject\nEMBRACE\n\nReference\n\nThis namelist is part of the ESMValTool\n###############################################################################\n', u'DIAGNOSTICS': <diagdef.AllDiagnostics instance at 0x255c098>}
+('Input xml file: ', 'namelist_MyDiag.xml')
+PY  info: 
+PY  info: ______________________________________________________
+PY  info:   _____ ____  __  ____     __    _ _____           _  
+PY  info:  | ____/ ___||  \/  \ \   / /_ _| |_   _|__   ___ | | 
+PY  info:  |  _| \___ \| |\/| |\ \ / / _` | | | |/ _ \ / _ \| | 
+PY  info:  | |___ ___) | |  | | \ V / (_| | | | | (_) | (_) | | 
+PY  info:  |_____|____/|_|  |_|  \_/ \__,_|_| |_|\___/ \___/|_| 
+PY  info: ______________________________________________________
+PY  info: 
+PY  info:  http://www.esmvaltool.org/
+PY  info: _____________________________________________________________
+PY  info: 
+PY  info: CORE DEVELOPMENT TEAM AND CONTACTS:
+PY  info:   Veronika Eyring (PI; DLR, Germany - veronika.eyring@dlr.de)
+PY  info:   Bjoern Broetz (DLR, Germany - bjoern.broetz@dlr.de)
+PY  info:   Axel Lauer (DLR, Germany - axel.lauer@dlr.de)
+PY  info:   Mattia Righi (DLR, Germany - mattia.righi@dlr.de)
+PY  info: _____________________________________________________________
+PY  info: 
+PY  info: NAMELIST = namelist_MyDiag.xml >> file containing the paths and variable names (to be edited by runner)
+PY  info: WORKDIR  = /home/users/valeriu/ESMValToolTesting/MyDiag1_2/work >> path from namelist_myDiag.xml
+PY  info: CLIMODIR = /home/users/valeriu/ESMValToolTesting/MyDiag1_2/climo >> path from namelist_myDiag.xml
+PY  info: PLOTDIR  = /home/users/valeriu/ESMValToolTesting/MyDiag1_2/plots >> path from namelist_myDiag.xml
+PY  info: LOGFILE  = /home/users/valeriu/ESMValToolTesting/MyDiag1_2/work/refs-acknows_MyDiag.log >> log file
+PY  info: _____________________________________________________________
+PY  info: 
+PY  info: Starting the Earth System Model Evaluation Tool v1.1.0 at time: 2017-05-03 --  13:05:34...
+PY  info: 
+PY  info: MODEL = MPI-ESM-LR (CMIP5)
+PY  info: VARIABLE = ta (T3M)
+PY  info: Calling cmor_reformat.py to check/reformat model data
+indir = /home/users/valeriu/sdt/data/cmip5/output1/MPI-M/MPI-ESM-LR/historical/mon/atmos/Amon/r1i1p1/v20120315/ta/ >> where data is (taken from namelist_MyDiag.xml)
+infile = ta_Amon_MPI-ESM-LR_historical_r1i1p1*.nc >> data file
+fullpath = /home/users/valeriu/ESMValToolTesting/MyDiag1_2/climo/CMIP5/CMIP5_Amon_historical_MPI-ESM-LR_r1i1p1_T3M_ta_1910-1919.nc >> resampled data file
+PY  info: project is CMIP5
+PY  info: ensemble is r1i1p1
+PY  info: dir is /home/users/valeriu/sdt/data/cmip5/output1/MPI-M/MPI-ESM-LR/historical/mon/atmos/Amon/r1i1p1/v20120315/ta/
+PY  info: 
+PY  info: Calling ./interface_scripts/derive_var.ncl for 'MyVar' >> script that derives the (only) variable
+                                                                 >> reads variable_defs/MyVar.ncl (in this case)
+                                                                 >> straightforward extraction of temperature from data file (in this case)
+NCL info: <<<<<<<<<<< Entering derive_var (interface_scripts/derive_var.ncl)
+NCL info: <<<<<<<<<<<<<< Entering interface_get_fullpath
+NCL info: <<<<<<<<<<<<<<<<< Entering interface_replace_place_holders
+NCL info: >>>>>>>>>>>>>>>>> Leaving interface_replace_place_holders
+NCL info: >>>>>>>>>>>>>> Leaving interface_get_fullpath
+NCL info: >>>>>>>>>>> Leaving derive_var (interface_scripts/derive_var.ncl)
+PY  info: 
+PY  info: Running diag_script: ./diag_scripts/MyDiag.ncl >> script that does the bloody work (in this case, the MyDiag case)
+PY  info: with configuration file: ./nml/cfg_MyDiag/cfg_MyDiag.ncl >> script that tells MyDiag.ncl how to plot (e.g. projection, colour scheme etc)
+NCL info: <<<<<<<<<<< Entering MyDiag.ncl
+NCL info:     ++++++++++++++++++++++++++++++++++++++++++
+NCL info:     MyDiag.ncl (var: MyVar)
+NCL info:     ++++++++++++++++++++++++++++++++++++++++++
+NCL info: <<<<<<<<<<<<<< Entering write_references (interface_scripts/messaging.ncl)
+NCL info: >>>>>>>>>>>>>> Leaving write_references (interface_scripts/messaging.ncl)
+NCL info: <<<<<<<<<<<<<< Entering read_data (interface_scripts/data_handling.ncl)
+NCL info: <<<<<<<<<<<<<<<<< Entering interface_get_fullpath
+NCL info: <<<<<<<<<<<<<<<<<<<< Entering interface_replace_place_holders
+NCL info: >>>>>>>>>>>>>>>>>>>> Leaving interface_replace_place_holders
+NCL info: >>>>>>>>>>>>>>>>> Leaving interface_get_fullpath
+NCL info:        Reading in file = /home/users/valeriu/ESMValToolTesting/MyDiag1_2/climo/CMIP5/CMIP5_Amon_historical_MPI-ESM-LR_r1i1p1_T3M_MyVar_1910-1919.nc
+NCL info: <<<<<<<<<<<<<<<<< Entering write_filelist (interface_scripts/messaging.ncl)
+NCL info: >>>>>>>>>>>>>>>>> Leaving write_filelist (interface_scripts/messaging.ncl)
+NCL info: <<<<<<<<<<<<<<<<< Entering interface_get_dictkeys
+NCL info: <<<<<<<<<<<<<<<<<<<< Entering interface_replace_place_holders
+NCL info: >>>>>>>>>>>>>>>>>>>> Leaving interface_replace_place_holders
+NCL info: >>>>>>>>>>>>>>>>> Leaving interface_get_dictkeys
+NCL info: >>>>>>>>>>>>>> Leaving read_data (interface_scripts/data_handling.ncl)
+NCL info:      MyParam = 200 hPa
+NCL info:     processing MPI-ESM-LR_historical_r1i1p1
+NCL info: <<<<<<<<<<<<<< Entering extract_data (interface_scripts/data_handling.ncl)
+NCL info: <<<<<<<<<<<<<<<<< Entering extract_data_extended (interface_scripts/data_handling.ncl)
+NCL info: <<<<<<<<<<<<<<<<<<<< Entering interface_get_dictkeys
+NCL info: <<<<<<<<<<<<<<<<<<<<<<< Entering interface_replace_place_holders
+NCL info: >>>>>>>>>>>>>>>>>>>>>>> Leaving interface_replace_place_holders
+NCL info: >>>>>>>>>>>>>>>>>>>> Leaving interface_get_dictkeys
+NCL info: >>>>>>>>>>>>>>>>> Leaving extract_data_extended (interface_scripts/data_handling.ncl)
+NCL info: >>>>>>>>>>>>>> Leaving extract_data (interface_scripts/data_handling.ncl)
+NCL info:      ++++++++++++++ Variable summary of original data (A0): 
+Variable: A0
+Type: float
+Total Size: 8847360 bytes
+            2211840 values
+Number of Dimensions: 3
+Dimensions and sizes:	[time | 120] x [lat | 96] x [lon | 192]
+Coordinates: 
+            time: [-14596..-10975]
+            lat: [-88.57216644287109..88.57216644287109]
+            lon: [   0..358.125]
+Number Of Attributes: 7
+  _FillValue :	1e+20
+  average_op_ncl :	dim_avg_n over dimension(s): plev
+  long_name :	air temperature
+  cell_measures :	area
+  cell_methods :	time
+  units :	K
+  standard_name :	air_temperature
+NCL info: <<<<<<<<<<<<<< Entering time_operations (diag_scripts/lib/ncl/statistics.ncl)
+NCL info: >>>>>>>>>>>>>> Leaving time_operations (diag_scripts/lib/ncl/statistics.ncl)
+NCL info:      ++++++++++++++ Variable summary of time averaged data (data1): 
+NCL info: <<<<<<<<<<<<<< Entering project_style (diag_scripts/lib/ncl/style.ncl)
+NCL info: <<<<<<<<<<<<<<<<< Entering unique_labels_min (diag_scripts/lib/ncl/style.ncl)
+NCL info: <<<<<<<<<<<<<<<<<<<< Entering UNIQ (diag_scripts/lib/ncl/set_operators.ncl)
+NCL info: >>>>>>>>>>>>>>>>>>>> Leaving UNIQ (diag_scripts/lib/ncl/set_operators.ncl)
+NCL info: >>>>>>>>>>>>>>>>> Leaving unique_labels_min (diag_scripts/lib/ncl/style.ncl)
+NCL info: >>>>>>>>>>>>>> Leaving project_style (diag_scripts/lib/ncl/style.ncl)
+NCL info: <<<<<<<<<<<<<< Entering ncdf_write (interface_scripts/auxiliary.ncl)
+NCL info: <<<<<<<<<<<<<<<<< Entering att2var (interface_scripts/auxiliary.ncl)
+NCL info: <<<<<<<<<<<<<<<<<<<< Entering bname (interface_scripts/auxiliary.ncl)
+NCL info: >>>>>>>>>>>>>>>>>>>> Leaving bname (interface_scripts/auxiliary.ncl)
+NCL info: >>>>>>>>>>>>>>>>> Leaving att2var (interface_scripts/auxiliary.ncl)
+NCL info: <<<<<<<<<<<<<<<<< Entering att2var (interface_scripts/auxiliary.ncl)
+NCL info: >>>>>>>>>>>>>>>>> Leaving att2var (interface_scripts/auxiliary.ncl)
+NCL info: <<<<<<<<<<<<<<<<< Entering att2var (interface_scripts/auxiliary.ncl)
+NCL info: <<<<<<<<<<<<<<<<<<<< Entering bname (interface_scripts/auxiliary.ncl)
+NCL info: >>>>>>>>>>>>>>>>>>>> Leaving bname (interface_scripts/auxiliary.ncl)
+NCL info: >>>>>>>>>>>>>>>>> Leaving att2var (interface_scripts/auxiliary.ncl)
+NCL info: <<<<<<<<<<<<<<<<< Entering get_ncdf_name (interface_scripts/auxiliary.ncl)
+NCL info: <<<<<<<<<<<<<<<<<<<< Entering get_work_dir (interface_scripts/auxiliary.ncl)
+NCL info: >>>>>>>>>>>>>>>>>>>> Leaving get_work_dir (interface_scripts/auxiliary.ncl)
+NCL info: <<<<<<<<<<<<<<<<<<<< Entering basename (interface_scripts/auxiliary.ncl)
+NCL info: >>>>>>>>>>>>>>>>>>>> Leaving basename (interface_scripts/auxiliary.ncl)
+NCL info: <<<<<<<<<<<<<<<<<<<< Entering get_ncdf_dir (interface_scripts/auxiliary.ncl)
+NCL info: >>>>>>>>>>>>>>>>>>>> Leaving get_ncdf_dir (interface_scripts/auxiliary.ncl)
+NCL info: >>>>>>>>>>>>>>>>> Leaving get_ncdf_name (interface_scripts/auxiliary.ncl)
+NCL info: <<<<<<<<<<<<<<<<< Entering ncdf_define (interface_scripts/auxiliary.ncl)
+NCL info: <<<<<<<<<<<<<<<<<<<< Entering att2var (interface_scripts/auxiliary.ncl)
+NCL info: <<<<<<<<<<<<<<<<<<<<<<< Entering bname (interface_scripts/auxiliary.ncl)
+NCL info: >>>>>>>>>>>>>>>>>>>>>>> Leaving bname (interface_scripts/auxiliary.ncl)
+NCL info: >>>>>>>>>>>>>>>>>>>> Leaving att2var (interface_scripts/auxiliary.ncl)
+NCL info: <<<<<<<<<<<<<<<<<<<< Entering att2var (interface_scripts/auxiliary.ncl)
+NCL info: >>>>>>>>>>>>>>>>>>>> Leaving att2var (interface_scripts/auxiliary.ncl)
+NCL info: >>>>>>>>>>>>>>>>> Leaving ncdf_define (interface_scripts/auxiliary.ncl)
+NCL info:        Wrote variable MyVar to /home/users/valeriu/ESMValToolTesting/MyDiag1_2/work/MyDiag/MyDiag_MyVar.nc >> file containing Temp(area, avg_time)
+NCL info: >>>>>>>>>>>>>> Leaving ncdf_write (interface_scripts/auxiliary.ncl)
+NCL info: <<<<<<<<<<<<<< Entering contour_map
+NCL info: <<<<<<<<<<<<<<<<< Entering inlist (diag_scripts/lib/ncl/set_operators.ncl)
+NCL info: >>>>>>>>>>>>>>>>> Leaving inlist (diag_scripts/lib/ncl/set_operators.ncl)
+NCL info: <<<<<<<<<<<<<<<<< Entering att2var (interface_scripts/auxiliary.ncl)
+NCL info: >>>>>>>>>>>>>>>>> Leaving att2var (interface_scripts/auxiliary.ncl)
+NCL info: <<<<<<<<<<<<<<<<< Entering att2var (interface_scripts/auxiliary.ncl)
+NCL info: <<<<<<<<<<<<<<<<<<<< Entering bname (interface_scripts/auxiliary.ncl)
+NCL info: >>>>>>>>>>>>>>>>>>>> Leaving bname (interface_scripts/auxiliary.ncl)
+NCL info: >>>>>>>>>>>>>>>>> Leaving att2var (interface_scripts/auxiliary.ncl)
+NCL info: <<<<<<<<<<<<<<<<< Entering get_wks (aux_plotting.ncl)
+NCL info: <<<<<<<<<<<<<<<<<<<< Entering output_type (aux_plotting.ncl)
+NCL info: >>>>>>>>>>>>>>>>>>>> Leaving output_type (aux_plotting.ncl)
+NCL info: <<<<<<<<<<<<<<<<<<<< Entering get_outfile_name (aux_plotting.ncl)
+NCL info: <<<<<<<<<<<<<<<<<<<<<<< Entering output_type (aux_plotting.ncl)
+NCL info: >>>>>>>>>>>>>>>>>>>>>>> Leaving output_type (aux_plotting.ncl)
+NCL info: <<<<<<<<<<<<<<<<<<<<<<< Entering get_plot_dir (aux_plotting.ncl)
+NCL info: >>>>>>>>>>>>>>>>>>>>>>> Leaving get_plot_dir (aux_plotting.ncl)
+NCL info: <<<<<<<<<<<<<<<<<<<<<<< Entering basename (interface_scripts/auxiliary.ncl)
+NCL info: >>>>>>>>>>>>>>>>>>>>>>> Leaving basename (interface_scripts/auxiliary.ncl)
+NCL info: <<<<<<<<<<<<<<<<<<<<<<< Entering get_output_dir (interface_scripts/auxiliary.ncl)
+NCL info: >>>>>>>>>>>>>>>>>>>>>>> Leaving get_output_dir (interface_scripts/auxiliary.ncl)
+NCL info: >>>>>>>>>>>>>>>>>>>> Leaving get_outfile_name (aux_plotting.ncl)
+NCL info: >>>>>>>>>>>>>>>>> Leaving get_wks (aux_plotting.ncl)
+NCL info: <<<<<<<<<<<<<<<<< Entering att2var (interface_scripts/auxiliary.ncl)
+NCL info: >>>>>>>>>>>>>>>>> Leaving att2var (interface_scripts/auxiliary.ncl)
+NCL info:         Wrote /MyDiag_MyVar.pdf
+NCL info: >>>>>>>>>>>>>> Leaving contour_map
+NCL info: >>>>>>>>>>> Leaving MyDiag
+PY  info: 
+PY  info: Ending the Earth System Model Evaluation Tool v1.1.0 at time: 2017-05-03 --  13:05:51
+PY  info: Time for running namelist was: 0:00:17.241350
+PY  info: 
+PY  info: For the required references/acknowledgements of these diagnostics see: 
+PY  info: /home/users/valeriu/ESMValToolTesting/MyDiag1_2/work/refs-acknows_MyDiag.log

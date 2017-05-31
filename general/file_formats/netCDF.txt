@@ -1,0 +1,1 @@
+Manual: http://www.unidata.ucar.edu/software/netcdf/docs/user_guide.html

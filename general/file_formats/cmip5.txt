@@ -1,0 +1,18 @@
+CMIP5
+------
+Coupled Model Intercomparison Project
+--------------------------------------
+
+variables list: http://cmip-pcmdi.llnl.gov/cmip5/docs/standard_output.pdf
+
+CMIP5 Data Characteristics:
+
+   - Each file contains a single output variable (along with coordinate/grid variables, attributes and other metadata) from a single model and a single simulation (i.e., from a single ensemble member of a single climate experiment). This method of structuring model output best serves the needs of most researchers who are typically interested in only a few of the many variables in the Model Intercomparison Project (MIP) databases. Data requests can be satisfied by simply sending the appropriate file(s) without first extracting the individual field(s) of interest.
+
+   - There is flexibility in specifying how many time slices (samples) are stored in a single file. A single file can contain all the time-samples for a given variable and climate experiment, or the samples can be distributed in a sequence of files.
+
+   - Much of the metadata written to the output files is defined in MIP-specific tables of information, which in this document are referred to simply as "MIP tables" in ASCII files.
+
+   - The metadata is constrained by the CF convention (NetCDF Climate and Forecast (CF) Metadata Convention) and as specified in the CMIP5 tables.
+
+   - The output files are written through the NetCDF API following the NETCDF_CLASSIC model and without compression of any kind. 

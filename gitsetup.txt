@@ -1,0 +1,20 @@
+# adding to github
+git init
+git add .
+git config --global user.email "valeriu.predoi@gmail.com"
+git config --global user.name "Valeriu Predoi"
+git commit * -m "first commit"
+git remote add origin https://github.com/valeriupredoi/synda_wrapper.git
+git remote -v
+git push origin master
+git status
+
+# esmval git example adding synda_wrapper
+# and setting the tracking to remote
+git clone https://github.com/ESMValGroup/ESMValTool.git
+git checkout origin/REFACTORING_backend
+git checkout -b REFACTORING_mask
+cp -r ~/git/synda_wrapper/ .
+git add synda_wrapper/
+git commit synda_wrapper/ -m "added synda wrapper files"
+git push --set-upstream origin REFACTORING_mask

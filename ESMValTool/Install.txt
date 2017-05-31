@@ -1,0 +1,4 @@
+Install ESMVal
+--------------
+Get the ESMVal tarball from https://github.com/ESMValGroup/ESMValTool/releases or from this directory (v1.1.0 here)
+Extract tar -xvf ESMValTool-1.1.0.tar.gz

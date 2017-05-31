@@ -1,0 +1,4 @@
+Installation via Anaconda works fine: see http://scitools.org.uk/iris/docs/v1.12.0/installing.html
+
+conda install -c conda-forge iris
+conda install -c conda-forge iris-sample-data
