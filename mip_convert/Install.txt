@@ -1,0 +1,34 @@
+1. Get the source codes
+========================
+[installation from a fresh Anaconda 4.4 install]
+--------------------------------------------------
+
+Need to let Met Office know we are svn co stufff, so in .subversion/servers change:
+[global]
+
+[metofficesharedrepos]
+username = USERNAME
+store-plaintext-passwords = no
+
+[groups]
+metofficesharedrepos = code*.metoffice.gov.uk
+
+Then:
+svn checkout https://code.metoffice.gov.uk/svn/cdds/main/trunk/mip_convert
+svn checkout https://code.metoffice.gov.uk/svn/cdds/main/trunk/mip_convert
+
+Create a VM for CMOR:
+conda create -n CMOR -c conda-forge -c pcmdi -c uvcdat cmor
+source activate CMOR
+
+Install dependencies:
+conda install -c conda-forge configparser
+conda install -c conda-forge iris
+conda install -c conda_forge scipy
+conda install -c conda_forge netcdf4
+
+
+2. Install codes:
+=================
+hadsdk: python setup.py install
+mip_convert: python setup.py --with-unpack install
