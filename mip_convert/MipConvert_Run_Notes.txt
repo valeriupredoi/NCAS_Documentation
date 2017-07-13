@@ -1,0 +1,47 @@
+Running an example
+===================
+
+1. Configuration file: mip_convert.cfg
+======================================
+Sections to be changed example:
+[COMMON]
+metadata_dir: /group_workspaces/jasmin/ncas_cms/valeriu/mip_convert_test
+data_dir: /group_workspaces/jasmin/ncas_cms/valeriu/mip_convert_test
+
+The CMOR tables are stored in:
+[cmor_setup]
+inpath: ${COMMON:metadata_dir}/cmor/Tables
+
+--> this dir must contain the CMIP6_CV.json and a whole bunch of CMIP6 json files for  variables:
+one way I found is to git clone the CMOR set from https://github.com/PCMDI/cmor
+
+git clone https://github.com/PCMDI/cmor.git
+
+2. input/output
+===============
+mip_converts used input/ as the in-dir (needs to be created!)
+the config file stores this info in
+[request]
+sourcedir: ${COMMON:data_dir}/input
+
+3. Download a pp file
+=====================
+I got one from Grenville:
+
+cp /group_workspaces/jasmin/ncas_cms/grenville/archive/u-an561/19781201T0000Z/an561a.pm1978dec.pp .
+mkdir input/u-an561a
+cp an561a.pm1978dec.pp input/u-an561a
+
+Change suite id in cfg file:
+suite_id: u-an561a
+
+abcde is the suite identifier and is a dir, needs a subdir called apm (that again doesnt
+get created automotically pfff).
+
+4. Hacks to work with a non-CMIP6 compliant
+============================================
+- change variable in cfg file to va;
+- changed CMIP6_Amon.json -> va -> from plev19 to plev17
+- changed CMIP6_coordinate.json -> plev19 to plev17 and removed 50k and 10k entries
+   >> this didn't quite work for two reasons: levels 100 and 500 are not found so I replaced them with duplicates of 1000
+                                                          the name plev17 has to appear for *all* the variables in CMIP6_Amon.json (puzzled as to why since I'm asking only for va)

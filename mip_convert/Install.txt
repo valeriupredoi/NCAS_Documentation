@@ -14,7 +14,7 @@ store-plaintext-passwords = no
 metofficesharedrepos = code*.metoffice.gov.uk
 
 Then:
-svn checkout https://code.metoffice.gov.uk/svn/cdds/main/trunk/mip_convert
+svn checkout https://code.metoffice.gov.uk/svn/cdds/main/trunk/hadsdk
 svn checkout https://code.metoffice.gov.uk/svn/cdds/main/trunk/mip_convert
 
 Create a VM for CMOR:
