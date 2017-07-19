@@ -1,0 +1,110 @@
+Paths
+======
+source: /group_workspaces/jasmin/ncas_cms/valeriu/afterburner
+testing: /group_workspaces/jasmin/ncas_cms/valeriu/cmm_test
+rose suite: /group_workspaces/jasmin/ncas_cms/valeriu/u-aj662
+Making the paths work:
+import sys
+sys.path
+sys.path.append('/group_workspaces/jasmin/ncas_cms/valeriu/afterburner/lib/python')
+#/apps/contrib/metomi/rose/lib/python/rose/
+sys.path.append('/apps/contrib/metomi/rose/lib/python/')
+
+Code changes
+=============
+Issue 1
+afterburner/bin/abrun.py l.53 should be changed e.g. hacked here, but a better try/except should be implemented
+    #try:
+    import afterburner
+    from afterburner.apps import initialise_app
+    from afterburner.exceptions import AfterburnerError
+    #except ImportError:
+    #    print("ERROR: Unable to import the afterburner package.")
+    #    print("     : Please check your Python path settings.")
+    #    sys.exit(1)
+Reason: the current try/except statement completely shrouds any error that occurs while importing the afterburner module. These errors are important to the user to know what modules are missing and why. See below for a result of changing this to allow for full Traceback while importing afterburner -
+
+Issue 2
+  File "/group_workspaces/jasmin/ncas_cms/valeriu/afterburner/lib/python/afterburner/contrib/umfilelist.py", line 215, in <module>
+    from netcdftime import datetime, date2num, num2date
+
+Why relying on netcdf4 v1.2.9 (latest) only?
+
+also here: afterburner/lib/python/afterburner/contrib/umfilelist.py l.215 should be:
+from netcdftime import datetime#, date2num, num2date
+from netCDF4 import num2date, date2num
+(date2num and num2date are not submodules of netcdftime in python2, also these are slow, why use them?)
+
+Issue 3
+
+Another issue - disabling sync with mass:
+in config file: /roses/u-aj662/app/model_monitor/rose-app.conf 
+
+[general]
+sync_with_mass=false
+
+and not having any data to read does not prompt the code to exit and say I don't have any data, it still goes ahead and plots (empty) plots and generates the webpage
+
+Requirements
+=============
+netcdf4=1.2.9 (any earlier version does not have num2date)
+
+Enabling non-MASS file retrieval
+=================================
+Tentative code tree change:
+
+Getting files (pp)
+------------------
+1. Statrting point is a function called ``get_pp'' from /afterburner/lib/python/afterburner/io/datastores.py:
+-->> l.233 moose.get_pp(dest_dir, moose_uri, files=filenames,
+                        stashcodes=[var.stash_code], overwrite=overwrite,
+                        fill_gaps=fill_gaps)
+
+2. Module moose is imported: /afterburner/lib/python/afterburner/io/moose.py:
+-->> l.434 get_pp(dest_dir, moose_uri, files=None, stashcodes=None, time_range=None,
+        overwrite=False, fill_gaps=False, keep_query_file=False, splitter_args=None):
+                             [...]
+                             -->> l.494 retrieve_files(dest_dir, moose_uri, files=chunk, stashcodes=stashcodes,
+                                            time_range=time_range, overwrite=overwrite, fill_gaps=fill_gaps,
+                                            keep_query_file=keep_query_file)
+
+3. All data retrieval is based on moose infrastructure: basically all the data retrieval/filtering needs to be changed
+from moose infrastructure to generic data querying and caching;
+
+4. cache structure start:
+Caching code:
+/afterburner/lib/python/afterburner/io/datacaches.py
+l.461 in function:  def fetch_files(self, varlist, overwrite=False, **kwargs):
+self.datastore.fetch_files_by_variable(varlist, overwrite=overwrite,
+                dest_dir=self.base_dir, callback=self.get_cache_dir_for_variable)
+-->> /io/datastores.py l.163 -->> moose.get_pp() (see above)
+
+5. cache structure tree:
+-->> /io/datacahes.py l.489 in EnsembleVarSplitDataCache(DataCache): structure:
+      scratch/
+        mary/
+          ens_var_split_cache/    <-- cache base directory
+            mi-abcde/
+              r1i1p1/             <-- ensemble member 1
+                apy/
+                  m01s00i024/
+                    abcdea.py1970.pp
+                    abcdea.py1971.pp
+                    ...
+                  m01s03i236/
+                    ...
+                apm/
+                  m01s00i024/
+                    ...
+                  m01s03i236/
+                    ...
+                ony/
+                  sosstsst/
+                    ...
+              r2i1p1/             <-- ensemble member 2
+                apy/
+                  ...
+File fetching -->> l.601 datastore.fetch_files_by_variable(varlist, overwrite=overwrite,
+                dest_dir=self.base_dir, callback=self.get_cache_dir_for_variable) -->> moose.get_pp() 
+
+
