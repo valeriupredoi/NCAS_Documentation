@@ -3,4 +3,4 @@ name: Valeriu Predoi
 passwd: uni wide
 incoming: imap.reading.ac.uk/TLS/default port
 outgoing: smtp.reading.ac.uk/default set
-user: bf915408
+user: bfXXXXXX

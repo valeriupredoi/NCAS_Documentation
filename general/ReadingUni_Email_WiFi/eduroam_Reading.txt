@@ -13,7 +13,7 @@ drwxr-xr-x 24 valeriu valeriu 4096 May 10 12:20 ..
 -rw-------  1 valeriu valeriu  279 May  9 17:52 cat_installer.conf
 You will need the ca.pem when manually configuring
 Manual configuration (depending on your system) via network manager:
-user: bf915408@reading.ac.uk
+user: bfXXXXXX@reading.ac.uk
 passwd: university wide
 add ca cert and select WPA2 authentication
 voila!
