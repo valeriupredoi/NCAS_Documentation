@@ -1,0 +1,4 @@
+svn checkout https://code.metoffice.gov.uk/svn/cdds/main/trunk/mip_convert
+cd mip_convert
+python setup.py --with-unpack build_ext -I /usr/local/sci/include/ -L /usr/local/sci/lib/ --inplace
+source mo_dev_setup.sh
