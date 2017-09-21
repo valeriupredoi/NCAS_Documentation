@@ -106,27 +106,34 @@ class TestMain(unittest.TestCase):
     """
 
     def setUp(self):
-        # as it is now dirname is where this file lives
-        # suggest setting a dedicated 'functional' test directory
-        # dirname = path/to/functional
-        dirname = os.path.dirname(os.path.realpath(__file__))
-        ##########################################
-        # Centralizing functional tests on JASMIN
-        ##########################################
-        # setup assumes the following:
-        # - (dirname) is master test directory where this file lives;
-        # - (dirname)/functional contains:
-        #   - multiple test dirs e.g. test_CMIP5_Amon_va... (data_dir);
-        #   - one input(set1:pp,set2:pp, set3:pp) dir;
-        #   - each (data_dir) has one reference_dir(with a netCDF file);
-        #   - each (data_dir) has one etc(with a mip_convert.cfg that will be 
-        #     changed to suit the user test);
-        ancil_root = '/project/cdds' # hardcode this accordingly
-        cmor_files = 'full/path/to/cmor_files' # hardcode this accordingly
-        self.config_base_path = os.path.join(dirname, 'functional')
-        #self.data_base_path = (
-        #    '/project/cdds/testdata/diagnostics/test_cases/')
-        self.out_base_path = cfb.prepare_test_cases('home/user/path', self.config_base_path, ancil_root, cmor_files)[1]
+        # would stronly advise put these in
+        # a configuration FILE
+        # main root directory
+        self.config_base_path = '/project/cdds'
+        # main test directory
+        self.main_test_dir = 'testdata/functional_tests'
+        # test cases directory
+        self.test_cases_dir = 'test_cases'
+        # ancil root
+        self.ancil_root = '/project/cdds/etc/um_ancil'
+        # cmor root
+        self.cmor_files = '/project/cdds'
+        # where original mip_convert.cfg files live
+        # these will have to move to functional_tests/test_cases/$TEST
+        here = os.path.dirname(os.path.realpath(__file__))
+        self.test_templates_path = os.path.join(here, 'functional')
+        # get user and create path to test dir
+        from os.path import expanduser
+        user_home = expanduser("~")
+        user_test_dir = os.path.join(user_home, 'mip_func_tests')
+        # output root
+        self.out_base_path = cfb.prepare_test_cases(user_test_dir, 
+                                                    self.config_base_path, 
+                                                    self.main_test_dir, 
+                                                    self.test_cases_dir, 
+                                                    self.test_templates_path, 
+                                                    self.ancil_root, 
+                                                    self.cmor_files)
         self.compare_netcdf = (
             'nccmp -dmgfbi {tolerance} {history} {options} '
             '--globalex=cmor_version,creation_date,data_specs_version,'
@@ -138,14 +145,9 @@ class TestMain(unittest.TestCase):
         AbstractAxisMaker.axis_cache = dict()
 
     def convert(self, input_dir, output_dir, reference_dir, filenames):
-        #config_file = os.path.join(
-        #    self.config_base_path, input_dir, 'etc', 'mip_convert.cfg')
-        config_file = cfb.prepare_test_cases('home/user/path', self.config_base_path, ancil_root, cmor_files)[0]
-        #data_dir = os.path.join(self.data_base_path, input_dir)
-        #log_name = os.path.join(data_dir, 'mip_convert.log')
-        #output_dir = os.path.join(data_dir, output_dir)
-        data_dir = os.path.join(self.config_base_path, input_dir)
+        data_dir = os.path.join(self.config_base_path, self.main_test_dir, self.test_cases_dir, input_dir)
         output_dir = os.path.join(self.out_base_path, input_dir, output_dir)
+        config_file = os.path.join(output_dir, 'mip_convert.cfg')
         log_name = os.path.join(output_dir, 'mip_convert.log')
         outputs = [os.path.join(output_dir, filename) for
                    filename in filenames]
